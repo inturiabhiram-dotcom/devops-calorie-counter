@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  .confirm-page {
+    min-height: calc(100vh - 72px);
+    background-image: url('https://images.unsplash.com/photo-1466637574441-749b8f19452f?w=1800&q=80');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .confirm-page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+  }
+  .confirm-card {
+    position: relative;
+    z-index: 1;
+    background: white;
+    border-radius: 16px;
+    padding: 56px 60px;
+    max-width: 520px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.25);
+  }
+  .confirm-icon {
+    width: 60px;
+    height: 60px;
+    background: #FEF2F2;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+  }
+  .confirm-icon svg {
+    width: 28px;
+    height: 28px;
+    stroke: #C05252;
+  }
+  .confirm-card h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    color: #2C2C2C;
+    margin-bottom: 12px;
+  }
+  .confirm-card p {
+    font-size: 15px;
+    color: #888;
+    margin-bottom: 36px;
+    line-height: 1.6;
+  }
+  .confirm-card p strong { color: #2C2C2C; }
+  .btn-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+  }
+  .btn-cancel {
+    padding: 13px 28px;
+    background: #F5F5F5;
+    color: #555;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-cancel:hover { background: #EBEBEB; color: #333; text-decoration: none; }
+  .btn-delete {
+    padding: 13px 28px;
+    background: #C05252;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-delete:hover { background: #9A3A3A; transform: translateY(-1px); }
+</style>
+
+<div class="confirm-page">
+  <div class="confirm-card">
+    <div class="confirm-icon">
+      <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+      </svg>
+    </div>
+    <h2>Delete Food Item?</h2>
+    <p>You're about to permanently remove <strong>{{ food }}</strong> from your food library. This cannot be undone.</p>
+    <div class="btn-row">
+      <a class="btn-cancel" href="{% url 'profile' %}">Cancel</a>
+      <form method="POST" action="{% url 'delete_food' food.id %}" style="display:inline;">
+        {% csrf_token %}
+        <button class="btn-delete" type="submit">Delete</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock content %}

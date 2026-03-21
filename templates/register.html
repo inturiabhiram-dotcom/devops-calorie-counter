@@ -1,0 +1,157 @@
+{% extends 'base2.html' %}
+
+{% block content %}
+<style>
+  .auth-layout {
+    display: flex;
+    min-height: 100vh;
+  }
+  .auth-visual {
+    flex: 1;
+    background-image: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1400&q=80');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 60px;
+  }
+  .auth-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 100%);
+  }
+  .auth-visual-text {
+    position: relative;
+    z-index: 1;
+  }
+  .auth-visual-text h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(32px, 4vw, 52px);
+    color: white;
+    line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .auth-visual-text p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.7);
+    max-width: 380px;
+    line-height: 1.6;
+  }
+  .auth-panel {
+    width: 480px;
+    min-width: 480px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 56px;
+    overflow-y: auto;
+  }
+  .auth-panel h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    color: #2C2C2C;
+    margin-bottom: 8px;
+  }
+  .auth-subtitle { font-size: 14px; color: #AAAAAA; margin-bottom: 36px; }
+  .field-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #888;
+    margin-bottom: 6px;
+    display: block;
+  }
+  .auth-panel input[type="text"],
+  .auth-panel input[type="password"],
+  .auth-panel input[type="email"] {
+    width: 100%;
+    padding: 13px 16px;
+    border: 1.5px solid #EBEBEB;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #2C2C2C;
+    background: #FAFAFA;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 18px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .auth-panel input:focus { border-color: #7C9A7E; background: white; }
+  .auth-submit {
+    width: 100%;
+    padding: 14px;
+    background: #2C2C2C;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 4px;
+  }
+  .auth-submit:hover { background: #7C9A7E; transform: translateY(-1px); }
+  .auth-errors {
+    margin-top: 14px;
+    font-size: 13px;
+    color: #E05252;
+    background: #FEF2F2;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border-left: 3px solid #E05252;
+  }
+  .auth-footer { margin-top: 28px; font-size: 13px; color: #AAAAAA; }
+  .auth-footer a { color: #7C9A7E; font-weight: 600; text-decoration: none; }
+  .auth-footer a:hover { text-decoration: underline; }
+
+  @media(max-width: 860px) {
+    .auth-visual { display: none; }
+    .auth-panel { width: 100%; min-width: unset; padding: 80px 32px 40px; }
+  }
+</style>
+
+<div class="auth-layout">
+  <div class="auth-visual">
+    <div class="auth-visual-text">
+      <h2>Start your wellness<br>journey today.</h2>
+      <p>Join thousands tracking their nutrition and achieving their health goals with precision.</p>
+    </div>
+  </div>
+  <div class="auth-panel">
+    <h1>Create an account.</h1>
+    <p class="auth-subtitle">It only takes a minute</p>
+    <form method="POST" action="" id="reg-form">
+      {% csrf_token %}
+      <label class="field-label">Username</label>
+      {{ form.username }}
+      <label class="field-label">Email Address</label>
+      {{ form.email }}
+      <label class="field-label">Password</label>
+      {{ form.password1 }}
+      <label class="field-label">Confirm Password</label>
+      {{ form.password2 }}
+      <input class="auth-submit" type="submit" name="Register" value="Create Account">
+    </form>
+    {% if form.errors %}
+    <div class="auth-errors">{{ form.errors }}</div>
+    {% endif %}
+    <div class="auth-footer">
+      Already have an account? <a href="{% url 'login' %}">Sign in</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  var fields = document.querySelectorAll('#reg-form input[type="text"], #reg-form input[type="password"], #reg-form input[type="email"]');
+  var placeholders = ['Choose a username', 'Your email address', 'Create a password', 'Confirm your password'];
+  fields.forEach(function(f, i) {
+    if(placeholders[i]) f.placeholder = placeholders[i];
+  });
+</script>
+{% endblock content %}

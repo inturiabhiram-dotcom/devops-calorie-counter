@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  .page-hero {
+    position: relative;
+    background-image: url('https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=1800&q=80');
+    background-size: cover;
+    background-position: center 50%;
+    min-height: 260px;
+    display: flex;
+    align-items: flex-end;
+    padding: 44px 64px;
+  }
+  .page-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.1) 70%);
+  }
+  .page-hero-content { position: relative; z-index: 1; }
+  .page-hero-content .eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 8px;
+  }
+  .page-hero-content h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 40px;
+    color: white;
+    line-height: 1.1;
+  }
+
+  .select-layout {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    min-height: calc(100vh - 330px);
+  }
+  .select-panel {
+    background: white;
+    border-right: 1px solid #F0F0F0;
+    padding: 48px 40px;
+  }
+  .panel-section-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #AAAAAA;
+    margin-bottom: 20px;
+  }
+  .select-panel .form-field-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #888;
+    display: block;
+    margin-bottom: 7px;
+  }
+  .select-panel input,
+  .select-panel select {
+    width: 100%;
+    padding: 13px 16px;
+    border: 1.5px solid #EBEBEB;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #2C2C2C;
+    background: #FAFAFA;
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 18px;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .select-panel input:focus,
+  .select-panel select:focus { border-color: #7C9A7E; background: white; }
+  .form-submit {
+    width: 100%;
+    padding: 13px;
+    background: #2C2C2C;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .form-submit:hover { background: #7C9A7E; }
+
+  .food-table-panel {
+    padding: 48px 64px 80px;
+    background: #FAFAF7;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    color: #2C2C2C;
+    margin-bottom: 24px;
+  }
+
+  @media(max-width: 900px) {
+    .select-layout { grid-template-columns: 1fr; }
+    .select-panel { border-right: none; border-bottom: 1px solid #F0F0F0; padding: 32px 24px; }
+    .food-table-panel { padding: 32px 24px 60px; }
+    .page-hero { padding: 32px 24px; }
+  }
+</style>
+
+<section class="page-hero">
+  <div class="page-hero-content">
+    <p class="eyebrow">Log Meal</p>
+    <h1>Select Food</h1>
+  </div>
+</section>
+
+<div class="select-layout">
+  <aside class="select-panel">
+    <p class="panel-section-title">Log Food Intake</p>
+    <form method="POST" action="">
+      {% csrf_token %}
+      {% for field in form %}
+      <label class="form-field-label">{{ field.label }}</label>
+      {{ field }}
+      {% endfor %}
+      <input class="form-submit" type="submit" value="Log Food">
+    </form>
+  </aside>
+
+  <main class="food-table-panel">
+    <h2 class="section-title">Available Food Items</h2>
+    <table class="pro-table">
+      <thead>
+        <tr>
+          <th>Food Name</th>
+          <th>Calories</th>
+          <th>Quantity</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for food in food_items %}
+        <tr>
+          <td>{{ food.name }}</td>
+          <td>{{ food.calorie }} kcal</td>
+          <td>{{ food.quantity }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="3" style="text-align:center; color:#AAAAAA; padding:40px;">
+            No food items available. <a href="{% url 'add_food' %}" style="color:#7C9A7E;">Add some →</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+</div>
+{% endblock content %}

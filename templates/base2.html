@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <title>Calorie Counter</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="{% static 'css/base.css' %}" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #F5F0E8;
+      --sage: #7C9A7E;
+      --charcoal: #2C2C2C;
+      --accent: #C4956A;
+      --text-muted: #8A8A8A;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: #1a1a1a;
+      color: var(--charcoal);
+      min-height: 100vh;
+    }
+    /* Brand */
+    .auth-brand {
+      position: fixed;
+      top: 32px;
+      left: 48px;
+      z-index: 10;
+      font-family: 'DM Serif Display', serif;
+      font-size: 22px;
+      color: white;
+      text-decoration: none;
+    }
+    .auth-brand span { color: var(--sage); }
+  </style>
+</head>
+<body>
+  <a href="{% url 'home' %}" class="auth-brand">Calorie<span>Counter</span></a>
+  {% block content %}{% endblock content %}
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</body>
+</html>

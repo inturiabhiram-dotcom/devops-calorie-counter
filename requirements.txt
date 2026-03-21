@@ -1,0 +1,5 @@
+django-filter
+datetime
+Django
+gunicorn
+setuptools

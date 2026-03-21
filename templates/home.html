@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  .hero-section {
+    position: relative;
+    min-height: 420px;
+    background-image: url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=1800&q=80');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+    padding: 60px 64px;
+    overflow: hidden;
+  }
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 60%, transparent 100%);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 1;
+  }
+  .hero-greeting {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(36px, 5vw, 60px);
+    color: white;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+  .hero-date {
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    letter-spacing: 0.5px;
+  }
+  .logout-link {
+    color: rgba(255,255,255,0.5);
+    font-size: 13px;
+    text-decoration: none;
+    margin-left: 12px;
+    transition: color 0.2s;
+  }
+  .logout-link:hover { color: white; }
+
+  /* Stats Strip */
+  .stats-strip {
+    background: white;
+    border-bottom: 1px solid #F0F0F0;
+    padding: 0 64px;
+    display: flex;
+    gap: 0;
+  }
+  .stat-item {
+    padding: 28px 48px 28px 0;
+    border-right: 1px solid #F0F0F0;
+    margin-right: 48px;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-item .s-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #AAAAAA;
+    margin-bottom: 6px;
+  }
+  .stat-item .s-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    color: #2C2C2C;
+    line-height: 1;
+  }
+
+  /* Progress bar */
+  .progress-section {
+    padding: 40px 64px;
+    background: #FAFAF7;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .progress-label span {
+    font-size: 13px;
+    font-weight: 500;
+    color: #666;
+  }
+  .progress-bar-track {
+    height: 10px;
+    background: #EEE;
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 100px;
+    background: linear-gradient(90deg, #7C9A7E, #C4956A);
+    transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+  }
+  .status-banner {
+    margin-top: 20px;
+    padding: 18px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+  }
+  .status-ok { background: #EEF5EF; color: #4A7A4C; border-left: 4px solid #7C9A7E; }
+  .status-warn { background: #FEF3EC; color: #9A5C2A; border-left: 4px solid #C4956A; }
+  .status-setup { background: #F0F0F0; color: #666; border-left: 4px solid #CCC; }
+  .status-banner a { color: inherit; font-weight: 600; }
+
+  /* Food table section */
+  .food-section {
+    padding: 40px 64px 80px;
+    background: #FAFAF7;
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    color: #2C2C2C;
+    margin-bottom: 24px;
+  }
+
+  @media(max-width: 768px) {
+    .hero-section { padding: 40px 24px; }
+    .stats-strip { padding: 0 24px; flex-wrap: wrap; }
+    .stat-item { padding: 20px 0; border-right: none; margin-right: 0; border-bottom: 1px solid #F0F0F0; width: 50%; }
+    .progress-section, .food-section { padding: 32px 24px; }
+  }
+</style>
+
+<!-- HERO -->
+<section class="hero-section">
+  <div class="hero-content">
+    <div class="hero-greeting">
+      Good day, {{ request.user }}.
+      <a href="{% url 'logout' %}" class="logout-link">Sign out</a>
+    </div>
+    <p class="hero-date">Here's your nutrition summary for today.</p>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-item">
+    <div class="s-label">Calories Consumed</div>
+    <div class="s-value">{{ total_calorie }}</div>
+  </div>
+  <div class="stat-item">
+    <div class="s-label">Daily Goal</div>
+    <div class="s-value">{{ calorie_goal }}</div>
+  </div>
+  {% if calorie_goal > 0 %}
+  <div class="stat-item">
+    <div class="s-label">Remaining</div>
+    <div class="s-value">{% if calorie_goal_status > 0 %}{{ calorie_goal_status }}{% else %}0{% endif %}</div>
+  </div>
+  {% endif %}
+</div>
+
+<!-- PROGRESS -->
+<section class="progress-section">
+  {% if calorie_goal > 0 %}
+  <div class="progress-label">
+    <span>Progress toward goal</span>
+    <span>{{ total_calorie }} / {{ calorie_goal }} kcal</span>
+  </div>
+  <div class="progress-bar-track">
+    <div class="progress-bar-fill" style="width: {% if calorie_goal > 0 %}{% widthratio total_calorie calorie_goal 100 %}{% else %}0{% endif %}%;"></div>
+  </div>
+  {% endif %}
+
+  <div class="status-banner {% if calorie_goal == 0 %}status-setup{% elif calorie_goal_status > 0 %}status-ok{% else %}status-warn{% endif %}">
+    {% if calorie_goal_status > 0 %}
+      You have <strong>{{ calorie_goal_status }} calories</strong> remaining to reach today's goal.
+    {% elif calorie_goal == 0 %}
+      No calorie goal set. <a href="{% url 'profile' %}">Set your daily goal →</a>
+    {% else %}
+      You've exceeded your goal by <strong>{{ over_calorie }} calories</strong> today.
+    {% endif %}
+  </div>
+</section>
+
+<!-- FOOD TABLE -->
+<section class="food-section">
+  <h2 class="section-title">Today's Food Log</h2>
+  <table class="pro-table">
+    <thead>
+      <tr>
+        <th>Food Item</th>
+        <th>Calories</th>
+        <th>Servings</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for food in food_selected_today %}
+      <tr>
+        <td>{{ food.food.name }}</td>
+        <td>{{ food.calorie_amount }} kcal</td>
+        <td>{{ food.amount }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="3" style="text-align:center; color:#AAAAAA; padding: 40px;">No food logged today. <a href="{% url 'select_food' %}" style="color:#7C9A7E;">Add food →</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock content %}
