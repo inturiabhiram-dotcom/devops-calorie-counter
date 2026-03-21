@@ -26,3 +26,8 @@ class BasicViewTests(TestCase):
             "password": "testpassword123"
         })
         self.assertEqual(response.status_code, 302)
+
+
+
+
+
