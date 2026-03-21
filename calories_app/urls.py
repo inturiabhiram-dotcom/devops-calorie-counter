@@ -1,4 +1,4 @@
-"""URL configuration for calories_app."""
+"""Django URL configuration for calories_app."""
 
 from django.urls import path
 

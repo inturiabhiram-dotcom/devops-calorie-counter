@@ -1,8 +1,7 @@
-"""Models for calories_app."""
+"""Django Models for calories_app. database"""
 
 from django.db import models
 from django.contrib.auth.models import User
-
 
 class Food(models.Model):
     """Food model."""
@@ -23,7 +22,6 @@ class Profile(models.Model):
     """Profile model."""
 
     objects = models.Manager()
-
     person_of = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     calorie_count = models.FloatField(default=0, null=True, blank=True)
     food_selected = models.ForeignKey(
@@ -71,7 +69,6 @@ class PostFood(models.Model):
     """PostFood model."""
 
     objects = models.Manager()
-
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     food = models.ForeignKey(Food, on_delete=models.CASCADE)
     calorie_amount = models.FloatField(default=0, null=True, blank=True)

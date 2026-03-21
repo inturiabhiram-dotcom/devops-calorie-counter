@@ -1,19 +1,16 @@
-"""Views for calories_app."""
+"""Django Views for calories_app."""
 
 # pylint: disable=invalid-name, relative-beyond-top-level
 
 from datetime import date, timedelta
-
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 from django.utils import timezone
-
 from .filters import FoodFilter
 from .forms import AddFoodForm, CreateUserForm, ProfileForm, SelectFoodForm
 from .models import Food, PostFood, Profile
-
 
 # home page view
 @login_required(login_url="login")
