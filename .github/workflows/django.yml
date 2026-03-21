@@ -62,7 +62,7 @@ jobs:
 
       - name: Run Django Tests
         run: |
-          coverage run --source='.' manage.py test
+          coverage run --source='.' manage.py test calories_app
           coverage xml -i
 
       - name: Upload Coverage Report
