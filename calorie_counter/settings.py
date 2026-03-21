@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',  
     'calories_app.apps.CaloriesConfig',
-    'django_filters'
+    'django_filters',
 ]
 
 MIDDLEWARE = [
